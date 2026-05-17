@@ -1,9 +1,18 @@
 package com.duoc.subpedido.controller;
 
+import com.duoc.subpedido.dto.PpordenDTO;
+import com.duoc.subpedido.dto.StandDTO;
+import com.duoc.subpedido.dto.SubpedidoCreateDTO;
+import com.duoc.subpedido.dto.SubpedidoDTO;
+
 import com.duoc.subpedido.model.Subpedido;
 import com.duoc.subpedido.service.SubpedidoService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,51 +24,93 @@ public class SubpedidoController {
     @Autowired
     private SubpedidoService service;
 
-    //obtener tdo
+    // LISTAR TODOS
     @GetMapping
     public List<Subpedido> listarTodos() {
-    return service.listarTodos();
-}
-
-    // generarSubpedidos
-    @PostMapping("/generar") //probar con ester endopoint
-    public Subpedido generar(@RequestBody Subpedido subPedido) {
-        return service.generarSubpedido(subPedido);
+        return service.listarTodos();
     }
 
-    // obtenerSubpedidoPorId
+    // OBTENER POR ID
     @GetMapping("/{id}")
-    public Subpedido obtenerPorId(@PathVariable Long id) {
-        return service.obtenerPorId(id);
+    public ResponseEntity<SubpedidoDTO> obtenerPorId(
+            @PathVariable Long id) {
+
+        SubpedidoDTO dto = service.findDtoById(id);
+        if (dto == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(dto);
     }
 
-    // listarSubpedidosPorStand
+    // CREAR SUBPEDIDO
+    @PostMapping("/generar")
+    public ResponseEntity<SubpedidoDTO> crearSubpedido(
+            @Valid @RequestBody SubpedidoCreateDTO dto) {
+        SubpedidoDTO creado = service.crearSubpedido(dto);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(creado);
+    }
+
+    // LISTAR POR STAND
     @GetMapping("/stand/{standId}")
-    public List<Subpedido> listarPorStand(@PathVariable Long standId) {
+    public List<Subpedido> listarPorStand(
+            @PathVariable Long standId) {
+
         return service.listarPorStand(standId);
     }
 
-    // listarSubpedidosPorPedido
+    // LISTAR POR PEDIDO
     @GetMapping("/pedido/{pedidoId}")
-    public List<Subpedido> listarPorPedido(@PathVariable Long pedidoId) {
+    public List<Subpedido> listarPorPedido(
+            @PathVariable Long pedidoId) {
+
         return service.listarPorPedido(pedidoId);
     }
 
-    // asignarSubpedidoAStand
+    // ASIGNAR STAND
     @PutMapping("/{id}/asignarStand/{standId}")
-    public Subpedido asignarStand(
+    public ResponseEntity<Subpedido> asignarStand(
             @PathVariable Long id,
             @PathVariable Long standId) {
 
-        return service.asignarStand(id, standId);
+        Subpedido actualizado = service.asignarStand(id, standId);
+        if (actualizado == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(actualizado);
     }
 
-    // actualizarEstadoSubpedido
+    // ACTUALIZAR ESTADO
     @PutMapping("/{id}/estado")
-    public Subpedido actualizarEstado(
-        @PathVariable Long id,
-        @RequestBody Subpedido subPedido) {
+    public ResponseEntity<Subpedido> actualizarEstado(
+            @PathVariable Long id,
+            @RequestBody Subpedido subPedido) {
 
-    return service.actualizarEstado(id, subPedido.getEstado());
-}
+        Subpedido actualizado =
+                service.actualizarEstado(id, subPedido.getEstado());
+        if (actualizado == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(actualizado);
+    }
+
+    // PROBAR MICROSERVICIO STAND
+    @GetMapping("/stand/externo/{id}")
+    public StandDTO probarStand(
+            @PathVariable Long id) {
+
+        return service.obtenerStand(id);
+    }
+
+    // PROBAR MICROSERVICIO PEDIDO
+    @GetMapping("/pedido/externo/{id}")
+    public PpordenDTO probarPporden(
+            @PathVariable Long id) {
+
+        return service.obtenerPporden(id);
+    }
 }

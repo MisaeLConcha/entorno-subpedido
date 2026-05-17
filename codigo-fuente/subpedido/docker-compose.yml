@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  basedatos-mysql:
+    image: mysql:8.0.33
+    container_name: mysql_servidor_dockersubpedido
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: universidad_backend
+    ports:
+      - "3309:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  subpedido-app:
+    image: microservicio-subpedido:latest
+    container_name: entorno-subpedido
+    ports:
+      - "8083:8083"
+    environment:
+      - PPORDEN_URL=http://18.210.19.5:8085
+      - STANDS_URL=http://34.231.120.127:8083
+
+
+  microservicio-pagos:
+    image: misconcha/microservicio-subpedido:v1-conchah
+    container_name: api_subpedido
+    restart: always
+    ports:
+      - "8086:8086"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://basedatos-mysql:3306/universidad_backend
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: rootpassword
+    depends_on:
+      - basedatos-mysql
+
+volumes:
+  mysql_data:
