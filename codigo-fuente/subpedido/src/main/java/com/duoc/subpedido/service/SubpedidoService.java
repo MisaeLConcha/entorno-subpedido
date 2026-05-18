@@ -2,6 +2,11 @@ package com.duoc.subpedido.service;
 
 import com.duoc.subpedido.dto.SubpedidoDTO;
 import com.duoc.subpedido.dto.SubpedidoCreateDTO;
+import com.duoc.subpedido.dto.PpordenDTO;
+import com.duoc.subpedido.dto.StandDTO;
+
+import com.duoc.subpedido.client.PpordenClient;
+import com.duoc.subpedido.client.StandClient;
 
 import com.duoc.subpedido.model.Subpedido;
 import com.duoc.subpedido.repository.SubpedidoRepository;
@@ -114,6 +119,6 @@ public class SubpedidoService {
     }
 
     public PpordenDTO obtenerPporden(Long id){
-        return ppordenClient.getPpordenById(id)
+        return ppordenClient.getPpordenById(id);
     }
 }

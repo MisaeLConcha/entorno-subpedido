@@ -99,7 +99,7 @@ public class SubpedidoController {
     }
 
     // PROBAR MICROSERVICIO STAND
-    @GetMapping("/stand/externo/{id}")
+    @GetMapping("/stand/externo")
     public StandDTO probarStand(
             @PathVariable Long id) {
 
@@ -107,7 +107,7 @@ public class SubpedidoController {
     }
 
     // PROBAR MICROSERVICIO PEDIDO
-    @GetMapping("/pedido/externo/{id}")
+    @GetMapping("/pedido/externo")
     public PpordenDTO probarPporden(
             @PathVariable Long id) {
 
