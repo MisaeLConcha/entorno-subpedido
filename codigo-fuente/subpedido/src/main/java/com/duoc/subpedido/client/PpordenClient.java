@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
         url = "${pporden.service.url}"
 )
 public interface PpordenClient {
-    @GetMapping("/api/v1/orden")
+    @GetMapping("/api/v1/orden/{id}")
     PpordenDTO getPpordenById(@PathVariable("id") Long id);
 }

@@ -1,4 +1,4 @@
-package com.duoc.subpedido.SwaggerConfig;
+package com.duoc.subpedido.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

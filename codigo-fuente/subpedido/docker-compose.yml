@@ -16,7 +16,7 @@ services:
       - mysql_data:/var/lib/mysql
 
   microservicio-pagos:
-    build: .
+    image: misconcha/microservicio-subpedido:v2-conchah
     container_name: api_subpedido
     restart: always
 

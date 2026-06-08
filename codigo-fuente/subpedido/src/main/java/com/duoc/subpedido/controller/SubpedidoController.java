@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 // Imports de Swagger (agregar estos)
+import com.duoc.subpedido.config.SwaggerConfig;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -49,14 +50,12 @@ public class SubpedidoController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<SubpedidoDTO> obtenerPorId(
-            @PathVariable Long id) {
+        @PathVariable Long id) {
 
-        SubpedidoDTO dto = service.findDtoById(id);
-        if (dto == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(dto);
-    }
+        return ResponseEntity.ok(
+            service.findDtoById(id)
+    );
+}
 
     // CREAR SUBPEDIDO
     @Operation(summary = "Registrar nuevo Subpedido con endopoint /generar")
@@ -105,16 +104,13 @@ public class SubpedidoController {
     })
     @PutMapping("/{id}/asignarStand/{standId}")
     public ResponseEntity<Subpedido> asignarStand(
-            @PathVariable Long id,
-            @PathVariable Long standId) {
+        @PathVariable Long id,
+        @PathVariable Long standId) {
 
-        Subpedido actualizado = service.asignarStand(id, standId);
-        if (actualizado == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(actualizado);
-    }
+    return ResponseEntity.ok(
+        service.asignarStand(id, standId)
+    );
+}
 
     // ACTUALIZAR ESTADO
     @Operation(summary = "Actualizar Estado existente con endpoint /{id}/estado")
@@ -124,17 +120,13 @@ public class SubpedidoController {
     })
     @PutMapping("/{id}/estado")
     public ResponseEntity<Subpedido> actualizarEstado(
-            @PathVariable Long id,
-            @RequestBody Subpedido subPedido) {
+        @PathVariable Long id,
+        @RequestBody Subpedido subPedido) {
 
-        Subpedido actualizado =
-                service.actualizarEstado(id, subPedido.getEstado());
-        if (actualizado == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(actualizado);
-    }
+    return ResponseEntity.ok(
+        service.actualizarEstado(id, subPedido.getEstado())
+    );
+}
 
     // PROBAR MICROSERVICIO STAND
     @Operation(summary = "Buscar Stand en otro microservicio")
@@ -142,7 +134,7 @@ public class SubpedidoController {
         @ApiResponse(responseCode = "200", description = "Stand encontrada"),
         @ApiResponse(responseCode = "404", description = "Stand no encontrada")
     })
-    @GetMapping("/stand/externo")
+    @GetMapping("/stand/externo/{id}")
     public StandDTO probarStand(
             @PathVariable Long id) {
 
@@ -155,7 +147,7 @@ public class SubpedidoController {
         @ApiResponse(responseCode = "200", description = "Pedido encontrada"),
         @ApiResponse(responseCode = "404", description = "Pedido no encontrada")
     })
-    @GetMapping("/pedido/externo")
+    @GetMapping("/pedido/externo/{id}")
     public PpordenDTO probarPporden(
             @PathVariable Long id) {
 
